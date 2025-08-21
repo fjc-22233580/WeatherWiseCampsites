@@ -49,7 +49,7 @@ async function getNearbyCampsites(centerLat, centerLon, radius = 30000, limit = 
       const p = f.properties || {};
       const name = p.name || p.address_line1 || "Campsite";
       const address = [p.address_line1, p.address_line2].filter(Boolean).join(", ");
-      return { name, lat: p.lat, lon: p.lon, address };
+      return { name, lat: p.lat, lon: p.lon, address, campsite_id: p.place_id };
     });
   } catch (e) {
     console.error("[getNearbyCampsites] error:", e?.response?.status, e?.response?.data || e.message);
