@@ -21,11 +21,15 @@ app.get("/api/locations/_direct", (req, res) => {
 //  require the route modules
 const campsiteRoutes = require("./routes/campsiteRoutes");   
 const locationsRoutes = require("./routes/locationsRoutes"); 
-
+const favouriteRoutes = require("./routes/favouriteRoutes");
+const preferencesRoutes = require("./routes/preferencesRoutes");
+const reviewRoutes = require("./routes/reviewRoutes");
 //  mount them (pass the router function, not an object)
 app.use("/api/campsites", campsiteRoutes);
 app.use("/api/locations", locationsRoutes);
-
+app.use("/api/favourites", favouriteRoutes);
+app.use("/api/preferences", preferencesRoutes);
+app.use("/api/reviews", reviewRoutes);
 // 404
 app.use((req, res) => res.status(404).send("Not found"));
 
