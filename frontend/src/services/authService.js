@@ -8,13 +8,10 @@ import { saveSession, clearSession, getAccessToken } from "../utils/storage.js";
  */
 export async function signUp(email, password) {
   const url = `${SUPABASE_URL}/auth/v1/signup`;
-  // Note: Project auth settings may require email confirmation.
   const data = await jsonFetch(url, {
     method: "POST",
     body: { email, password },
   });
-  // data can contain user/session depending on your Auth config.
-  // We only save session if Supabase returns an access_token immediately.
   if (data?.session?.access_token) {
     saveSession({
       access_token: data.session.access_token,
