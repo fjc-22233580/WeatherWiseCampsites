@@ -34,21 +34,30 @@ export function LocationPicker({ onConfirm }) {
   function renderDD(results) {
     if (!results.length) { hideDD(); return; }
     dd.classList.remove("hidden");
-    dd.innerHTML = results.map((r, i) => `
-      <button class="dropdown-item" role="option" data-i="${i}">
-        ${r.name || r.display_name || [r.town, r.postcode].filter(Boolean).join(" ") || "Unknown"}
-      </button>
-    `).join("");
+    dd.innerHTML = results.map((r, i) => {
+      const label =
+        r.formatted ||
+        r.name ||
+        r.display_name ||
+        [r.city, r.town, r.postcode, r.country, r.state].filter(Boolean).join(", ") ||
+        "Unknown";
+      return `<button class="dropdown-item" role="option" data-i="${i}">${label}</button>`;
+    }).join("");
 
     dd.querySelectorAll(".dropdown-item").forEach((b, i) => {
       b.addEventListener("click", () => {
         const loc = results[i];
-        input.value = loc.name || loc.display_name || input.value;
+        const label =
+          loc.formatted ||
+          loc.name ||
+          loc.display_name ||
+          [loc.city, loc.town, loc.postcode, loc.country, loc.state].filter(Boolean).join(", ");
+        input.value = label || input.value;
         hideDD();
         onConfirm?.({
           lat:  loc.lat ?? loc.latitude,
           lon:  loc.lon ?? loc.longitude,
-          name: loc.name || loc.display_name || input.value
+          name: label || input.value,
         });
       });
     });
@@ -70,12 +79,17 @@ export function LocationPicker({ onConfirm }) {
     const results = await doLookup(q);
     if (results.length) {
       const loc = results[0];
-      input.value = loc.name || loc.display_name || input.value;
+      const label =
+        loc.formatted ||
+        loc.name ||
+        loc.display_name ||
+        [loc.city, loc.town, loc.postcode, loc.country, loc.state].filter(Boolean).join(", ");
+      input.value = label || input.value;
       hideDD();
       onConfirm?.({
-        lat: loc.lat ?? loc.latitude,
-        lon: loc.lon ?? loc.longitude,
-        name: loc.name || loc.display_name || input.value
+        lat:  loc.lat ?? loc.latitude,
+        lon:  loc.lon ?? loc.longitude,
+        name: label || input.value,
       });
     }
   });
@@ -87,12 +101,17 @@ export function LocationPicker({ onConfirm }) {
     renderDD(results);
     if (results.length === 1) {
       const loc = results[0];
-      input.value = loc.name || loc.display_name || input.value;
+      const label =
+        loc.formatted ||
+        loc.name ||
+        loc.display_name ||
+        [loc.city, loc.town, loc.postcode, loc.country, loc.state].filter(Boolean).join(", ");
+      input.value = label || input.value;
       hideDD();
       onConfirm?.({
-        lat: loc.lat ?? loc.latitude,
-        lon: loc.lon ?? loc.longitude,
-        name: loc.name || loc.display_name || input.value
+        lat:  loc.lat ?? loc.latitude,
+        lon:  loc.lon ?? loc.longitude,
+        name: label || input.value,
       });
     }
   });
