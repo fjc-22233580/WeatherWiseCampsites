@@ -1,5 +1,5 @@
 import { RatingStars } from "./RatingStars.js";
-import { getReviews } from "../services/api.js";
+import { getReviews,postReview } from "../services/api.js";
 import { ReviewModal } from "./ReviewModal.js";
 import { weatherIconHTML } from "../constants/weatherIcons.js";
 import { formatTempC } from "../utils/units.js";
@@ -75,12 +75,12 @@ export function ResultCard(c) {
       quoteEl.textContent = "Reviews unavailable";
     }
   })();
-
+/*
   // need to  Add Review click -> open modal or navigate
   el.querySelector(".add-review").addEventListener("click", () => {
     // navigate to /pages/review or open modal 
     alert("Open review modal/form here.");
-  });
+  }); */
 
   const starsWrap = el.querySelector(".stars-wrap");
   const quoteEl   = el.querySelector(".quote");
@@ -108,13 +108,13 @@ export function ResultCard(c) {
   refreshReviews();
 
   el.querySelector(".add-review").addEventListener("click", () => {
+    if (!siteId) { alert("Missing campsite id."); return; }
     const modal = ReviewModal({
       campsite: c,
       onSubmit: async ({ rating, comment }) => {
-        await postReview(siteId, { rating, comment });
+        await postReview(siteId, { rating, comment }); // <-- now defined
         await refreshReviews();
       },
-      onClose: () => {},
     });
     document.body.appendChild(modal);
   });
