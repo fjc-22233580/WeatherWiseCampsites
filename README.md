@@ -42,3 +42,5 @@ or, in production mode:
 ```bash
 npm start
 ```
+
+Lastly, run frontend/index.html to start the frontend.
