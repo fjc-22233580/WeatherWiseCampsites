@@ -275,6 +275,16 @@
   .stars-input input:checked ~ span, .stars-input input:checked + span { 
     color:#f5a623 
   }
+  .icon-btn { 
+    border:0; 
+    background:transparent; 
+    font-size:20px; 
+    cursor:pointer; 
+  }
+  .icon-btn:hover { 
+    transform: scale(1.05); 
+  }
+
 
 
 
