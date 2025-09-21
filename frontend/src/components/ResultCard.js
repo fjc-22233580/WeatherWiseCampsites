@@ -1,9 +1,17 @@
 import { RatingStars } from "./RatingStars.js";
 import { getReviews } from "../services/api.js";
+import { weatherIconHTML } from "../constants/weatherIcons.js";
+import { formatTempC } from "../utils/units.js";
 
 export function ResultCard(c) {
   const el = document.createElement("article");
   el.className = "card campsite";
+
+  const wx = c.weather || {}; 
+  const wxIcon  = weatherIconHTML(wx);
+  const wxLabel = wx.label || "—";
+  const dayC    = formatTempC(wx.temp_max);
+  const nightC  = formatTempC(wx.temp_min);
 
   el.innerHTML = `
     <div class="card-row">

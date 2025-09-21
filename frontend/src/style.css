@@ -182,18 +182,31 @@
   .tabs{ 
     margin-top:10px; 
     display:flex; 
-    gap:8px; }
+    gap:8px; 
+}
   .tab{ 
     border:1px solid var(--border); 
     background:#fff; 
     border-radius:999px; 
     padding:6px 12px; 
     cursor:pointer; 
-    font-size:13px; }
-
+    font-size:13px; 
+}
   .tab.is-active{ 
     background:var(--brand); 
     color:#fff; 
-    border-color:var(--brand); }
+    border-color:var(--brand); 
+}
+  .wx-line { 
+    display: flex; 
+    align-items: center; 
+    gap: .5rem; 
+}
+  .wx-ico  { 
+    font-size: 1.25rem; 
+    line-height: 1; 
+    vertical-align: -12%; 
+}
+
   
   
