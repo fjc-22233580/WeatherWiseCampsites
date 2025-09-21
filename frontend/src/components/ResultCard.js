@@ -30,8 +30,10 @@ export function ResultCard(c) {
       </div>
       <div class="cell weather">
         <div class="muted">Weather:</div>
-        <div class="wx-line">${c.weather?.summary || "—"}</div>
-        <div class="wx-temp">Day: ${c.weather?.day ?? "—"}° · Night: ${c.weather?.night ?? "—"}°</div>
+        <div class="wx-line">
+            ${wxIcon}
+            <span class="wx-label">${wxLabel}</span></div>
+        <div class="wx-temp">Day: ${dayC}° · Night: ${nightC}°</div>
       </div>
       <div class="cell reviews">
         <div class="muted">Reviews:</div>
