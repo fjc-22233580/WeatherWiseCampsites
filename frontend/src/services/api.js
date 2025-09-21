@@ -1,6 +1,7 @@
 import { getAccessToken } from "../utils/storage.js";
 
 const BASE_URL = "http://localhost:4000";
+const API_BASE = "/api";
 
 async function fetchJSON(path, { method="GET", headers={}, body } = {}){
   const token = getAccessToken();
@@ -22,6 +23,37 @@ async function fetchJSON(path, { method="GET", headers={}, body } = {}){
   return data;
 }
 
+function authHeaders() {
+  const token = window.authService?.getToken?.();
+  return token ? { Authorization: `Bearer ${token}` } : {};
+}
+
+async function jsonGet(url) {
+  const res = await fetch(url, { headers: { "Content-Type":"application/json", ...authHeaders() }});
+  const data = await res.json().catch(() => null);
+  if (!res.ok) throw new Error(data?.error?.message || `HTTP ${res.status}`);
+  return data;
+}
+
+export async function searchLocations(text, limit = 5) {
+  const q = new URLSearchParams({ text, limit });
+  return jsonGet(`${API_BASE}/locations/search?${q}`);
+}
+
+export async function searchCampsites({ lat, lon, radius, weather, date }) {
+  const q = new URLSearchParams({
+    lat, lon, radius: String(radius || 3000),
+    ...(weather ? { weather } : {}),
+    ...(date ? { date } : {}),
+  });
+  return jsonGet(`${API_BASE}/campsites/search?${q}`);
+}
+
+export async function getReviews(campsiteId) {
+  return jsonGet(`${API_BASE}/reviews/${encodeURIComponent(campsiteId)}`);
+}
+
 // backend routes: GET /preferences, PUT /preferences
 export const getPreferences = () => fetchJSON("/preferences");
 export const savePreferences = (payload) => fetchJSON("/preferences", { method:"PUT", body: payload });
+

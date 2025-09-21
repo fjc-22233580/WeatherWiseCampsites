@@ -1,5 +1,6 @@
 import { AuthPage } from "./pages/authPage.js";
 import { PreferencesPage } from "./pages/preferencesPage.js";
+import { SearchPage } from "./pages/searchPage.js";
 
 function mount(el, child){ el.innerHTML=""; el.appendChild(child); }
 function markActive(id){
@@ -20,4 +21,38 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // Default route
   goSignup();
+});
+
+// exposing a minimal router
+const routes = {
+  search: () => SearchPage(),
+  preferences: () => PreferencesPage(),
+  auth: () => AuthPage(),
+};
+
+const root = document.getElementById("app");
+
+function render(el) {
+  root.innerHTML = "";
+  root.appendChild(el);
+}
+
+export const app = {
+  navigate(name) {
+    const view = routes[name] ? routes[name]() : SearchPage();
+    render(view);
+    history.pushState({ name }, "", `#/${name}`);
+  },
+};
+window.app = app;
+
+// simple hash routing
+window.addEventListener("popstate", () => {
+  const name = (location.hash.replace("#/", "") || "search");
+  app.navigate(name);
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  const initial = (location.hash.replace("#/", "") || "search");
+  app.navigate(initial);
 });
