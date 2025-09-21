@@ -60,10 +60,19 @@ export async function signOut() {
   }
 
   const url = `${SUPABASE_URL}/auth/v1/logout`;
-  await jsonFetch(url, {
-    method: "POST",
-    headers: { Authorization: `Bearer ${token}` },
-  });
+  try {
+    await jsonFetch(url, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+    });
+  } catch (err){
+     // If the access_token is expired/invalid, just clear locally.
+     if (err.status === 401 || /invalid JWT|expired/i.test(err.message)) {
+        clearSession();
+        return { msg: "Signed out (local, token was expired)" };
+      }
+      throw err; // some other error → surface it
+    }
 
   clearSession();
   return { msg: "Signed out" };
