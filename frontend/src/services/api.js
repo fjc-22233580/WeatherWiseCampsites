@@ -52,7 +52,23 @@ export async function searchCampsites({ lat, lon, radius, weather, date }) {
   return jsonGet(`${BASE_URL}${API_BASE}/campsites/search?${q}`);
 }
 
-export async function postReview(campsiteId, payload) {
+export async function getReviews(campsiteId) {
+    return jsonGet(`${BASE_URL}${API_BASE}/reviews/${encodeURIComponent(campsiteId)}`);
+  }
+
+  export async function postReview(campsiteId, { rating, comment }) {
+    return fetchJSON(`${API_BASE}/reviews`, {
+      method: "PUT",
+      body: {
+        campsite_id: String(campsiteId),
+        rating: Number(rating),
+        comment: comment ?? ""
+      }
+    });
+  }
+
+/*
+export async function postReview(campsiteId, {payload}) {
     // payload: { rating: 1..5, comment?: string }
     const body = {
         campsite_id: String(campsiteId),
@@ -67,11 +83,9 @@ export async function postReview(campsiteId, payload) {
     const data = await res.json().catch(() => null);
     if (!res.ok) throw new Error(data?.error?.message || `HTTP ${res.status}`);
     return data;
-  }
+  }*/
 
-export async function getReviews(campsiteId) {
-  return jsonGet(`${BASE_URL}${API_BASE}/reviews/${encodeURIComponent(campsiteId)}`);
-}
+
 
 // backend routes: GET /preferences, PUT /preferences
 export const getPreferences = () => fetchJSON("/preferences");
