@@ -67,27 +67,24 @@ export async function getReviews(campsiteId) {
     });
   }
 
-/*
-export async function postReview(campsiteId, {payload}) {
-    // payload: { rating: 1..5, comment?: string }
-    const body = {
-        campsite_id: String(campsiteId),
-        rating: Number(payload.rating),
-        comment: payload.comment ?? "",
-      };
-    const res = await fetch(`${BASE_URL}${API_BASE}/reviews/${encodeURIComponent(campsiteId)}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json", ...authHeaders() },
-      body: body,
-    });
-    const data = await res.json().catch(() => null);
-    if (!res.ok) throw new Error(data?.error?.message || `HTTP ${res.status}`);
-    return data;
+  //favourites
+  export function getFavourites() {
+    return fetchJSON("/favourites");
+  }
+  export function toggleFavourite(campsiteId) {
+    return fetchJSON(`/favourites/${encodeURIComponent(campsiteId)}`, { method: "POST" });
+  }
+  
+ /* //preferences
+  export function getPreferences() {
+    return fetchJSON("/preferences");
+  }
+  export function savePreferences(prefs) {
+    return fetchJSON("/preferences", { method: "PUT", body: prefs });
   }*/
 
 
-
-// backend routes: GET /preferences, PUT /preferences
+  
 export const getPreferences = () => fetchJSON("/preferences");
 export const savePreferences = (payload) => fetchJSON("/preferences", { method:"PUT", body: payload });
 
