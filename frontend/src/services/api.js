@@ -54,10 +54,15 @@ export async function searchCampsites({ lat, lon, radius, weather, date }) {
 
 export async function postReview(campsiteId, payload) {
     // payload: { rating: 1..5, comment?: string }
+    const body = {
+        campsite_id: String(campsiteId),
+        rating: Number(payload.rating),
+        comment: payload.comment ?? "",
+      };
     const res = await fetch(`${BASE_URL}${API_BASE}/reviews/${encodeURIComponent(campsiteId)}`, {
-      method: "POST",
+      method: "PUT",
       headers: { "Content-Type": "application/json", ...authHeaders() },
-      body: JSON.stringify(payload),
+      body: body,
     });
     const data = await res.json().catch(() => null);
     if (!res.ok) throw new Error(data?.error?.message || `HTTP ${res.status}`);
