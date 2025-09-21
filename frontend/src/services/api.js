@@ -37,7 +37,7 @@ async function jsonGet(url) {
 
 export async function searchLocations(text, limit = 5) {
   const q = new URLSearchParams({ text, limit });
-  return jsonGet(`${API_BASE}/locations/search?${q}`);
+  return jsonGet(`${BASE_URL} / ${API_BASE}/locations/search?${q}`);
 }
 
 export async function searchCampsites({ lat, lon, radius, weather, date }) {
@@ -46,11 +46,11 @@ export async function searchCampsites({ lat, lon, radius, weather, date }) {
     ...(weather ? { weather } : {}),
     ...(date ? { date } : {}),
   });
-  return jsonGet(`${API_BASE}/campsites/search?${q}`);
+  return jsonGet(`${BASE_URL} / ${API_BASE}/campsites/search?${q}`);
 }
 
 export async function getReviews(campsiteId) {
-  return jsonGet(`${API_BASE}/reviews/${encodeURIComponent(campsiteId)}`);
+  return jsonGet(`${BASE_URL}${API_BASE}/reviews/${encodeURIComponent(campsiteId)}`);
 }
 
 // backend routes: GET /preferences, PUT /preferences
