@@ -37,7 +37,10 @@ async function jsonGet(url) {
 
 export async function searchLocations(text, limit = 5) {
   const q = new URLSearchParams({ text, limit });
-  return jsonGet(`${BASE_URL} / ${API_BASE}/locations/search?${q}`);
+  const url = `${BASE_URL}${API_BASE}/locations/search?${q}`;
+  const data = await jsonGet(url);
+
+  return Array.isArray(data) ? data : (data?.items ?? []);
 }
 
 export async function searchCampsites({ lat, lon, radius, weather, date }) {
@@ -46,7 +49,7 @@ export async function searchCampsites({ lat, lon, radius, weather, date }) {
     ...(weather ? { weather } : {}),
     ...(date ? { date } : {}),
   });
-  return jsonGet(`${BASE_URL} / ${API_BASE}/campsites/search?${q}`);
+  return jsonGet(`${BASE_URL}${API_BASE}/campsites/search?${q}`);
 }
 
 export async function getReviews(campsiteId) {
