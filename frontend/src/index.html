@@ -1,0 +1,48 @@
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WeatherWise Campsites</title>
+    <link href="./style.css" rel="stylesheet" />
+</head>
+<body>
+   <header class="topbar">
+      <h1>Weather Wise Campsites</h1>
+    </header>
+  
+    <div class="layout">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+         <div class="sidebar__section">
+           <div class="sidebar__item">
+             <span class="icon">🔎</span>
+             <span>Search</span>
+           </div>
+         </div>
+       
+         <div class="sidebar__section">
+           <a href="#" id="nav-auth-signup" class="sidebar__item sidebar__button is-active">
+             <span class="icon">👤</span>
+             <span>Create Account</span>
+             <span class="chev">›</span>
+           </a>
+           <a href="#" id="nav-auth-login" class="sidebar__item sidebar__button">
+             <span class="icon">🔐</span>
+             <span>Log in</span>
+             <span class="chev">›</span>
+           </a>
+           <a href="#" id="nav-preferences" class="sidebar__item sidebar__button">
+             <span class="icon">⚙️</span>
+             <span>Preferences</span>
+             <span class="chev">›</span>
+           </a>
+         </div>
+       </aside>       
+       
+      <main id="app" class="content"></main>
+    </div>
+  
+    <script type="module" src="../src/app.js"></script>
+</body>
+</html>
