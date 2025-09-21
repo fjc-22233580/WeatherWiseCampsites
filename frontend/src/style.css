@@ -183,7 +183,7 @@
     margin-top:10px; 
     display:flex; 
     gap:8px; 
-}
+  }
   .tab{ 
     border:1px solid var(--border); 
     background:#fff; 
@@ -191,22 +191,93 @@
     padding:6px 12px; 
     cursor:pointer; 
     font-size:13px; 
-}
+  }
   .tab.is-active{ 
     background:var(--brand); 
     color:#fff; 
     border-color:var(--brand); 
-}
+  }
   .wx-line { 
     display: flex; 
     align-items: center; 
     gap: .5rem; 
-}
+  }
   .wx-ico  { 
     font-size: 1.25rem; 
     line-height: 1; 
     vertical-align: -12%; 
-}
+  }
+  .rating { 
+    display:inline-flex; 
+    gap:.4rem; 
+    align-items:center 
+  }
+  .rating .stars { 
+    letter-spacing:.15rem; 
+    font-size:1.1rem 
+  }
+  .rating .count { 
+    color:#666; 
+    font-size:.9rem 
+  }
+  .modal-backdrop { 
+    position:fixed; 
+    inset:0; 
+    background:#0006; 
+    display:flex; 
+    align-items:center; 
+    justify-content:center; 
+    z-index:1000 
+  }
+  .modal { 
+    background:#fff; 
+    border-radius:12px; 
+    width:min(560px, 90vw); 
+    box-shadow:0 10px 30px #0003; 
+  }
+  .modal-header { 
+    padding:16px 20px; 
+    border-bottom:1px solid #eee 
+  } 
+  .modal-body { 
+    padding:16px 20px 
+  }
+  .modal-footer { 
+    display:flex; 
+    gap:12px; 
+    justify-content:flex-end; 
+    margin-top:8px 
+  }
+  .field { 
+    margin:12px 0 
+  }
+  .label { 
+    display:block; 
+    font-weight:600; 
+    margin-bottom:6px 
+  }
+  .value { 
+    color:#555 
+  }
+  .stars-input { 
+    display:flex; 
+    gap:6px; 
+    font-size:22px 
+  }
+  .stars-input input { 
+    appearance:none; 
+    position:absolute; 
+    opacity:0 
+  } 
+  .stars-input .star { 
+    cursor:pointer 
+  }
+  .stars-input input:checked ~ span, .stars-input input:checked + span { 
+    color:#f5a623 
+  }
+
+
+
 
   
   

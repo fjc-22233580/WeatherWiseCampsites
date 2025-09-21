@@ -52,6 +52,18 @@ export async function searchCampsites({ lat, lon, radius, weather, date }) {
   return jsonGet(`${BASE_URL}${API_BASE}/campsites/search?${q}`);
 }
 
+export async function postReview(campsiteId, payload) {
+    // payload: { rating: 1..5, comment?: string }
+    const res = await fetch(`${BASE_URL}${API_BASE}/reviews/${encodeURIComponent(campsiteId)}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...authHeaders() },
+      body: JSON.stringify(payload),
+    });
+    const data = await res.json().catch(() => null);
+    if (!res.ok) throw new Error(data?.error?.message || `HTTP ${res.status}`);
+    return data;
+  }
+
 export async function getReviews(campsiteId) {
   return jsonGet(`${BASE_URL}${API_BASE}/reviews/${encodeURIComponent(campsiteId)}`);
 }

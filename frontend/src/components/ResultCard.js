@@ -1,5 +1,6 @@
 import { RatingStars } from "./RatingStars.js";
 import { getReviews } from "../services/api.js";
+import { ReviewModal } from "./ReviewModal.js";
 import { weatherIconHTML } from "../constants/weatherIcons.js";
 import { formatTempC } from "../utils/units.js";
 
@@ -15,6 +16,7 @@ export function ResultCard(c) {
 
   el.innerHTML = `
     <div class="card-row">
+      <!-- left / favourite / weather cells ... -->
       <div class="cell">
         <div class="muted">Campsite:</div>
         <div class="title">${c.name || "Unknown site"}</div>
@@ -46,16 +48,31 @@ export function ResultCard(c) {
   // get latest reviews
   (async () => {
     try {
-      const r = await getReviews(c.id);
+      const siteId = c.id || c.place_id;
+      if (!siteId) return;
+
+      const r = await getReviews(siteId);
       const avg = r?.average || 0;
       const count = r?.count || 0;
       const sample = r?.latest?.comment || "";
 
-      const stars = RatingStars({ value: avg, count });
-      el.querySelector(".stars-wrap").appendChild(stars);
-      el.querySelector(".quote").textContent = sample || "";
-    } catch {
-      // ignore review fetch errors
+      const starsWrap = el.querySelector(".stars-wrap");
+      starsWrap.innerHTML = "";
+      starsWrap.appendChild(RatingStars({ value: avg, count }));
+
+       // latest quote (array or single object depending on backend)
+       const latest = Array.isArray(r?.latest) ? r.latest[0] : r?.latest;
+       const quoteEl = el.querySelector(".quote");
+       if (latest?.comment) {
+        quoteEl.textContent = `“${latest.comment}”`;
+        quoteEl.classList.remove("muted");
+       } else {
+        quoteEl.textContent = count ? "" : "No reviews yet";
+       }
+    } catch (e) {
+      // quiet fail – don’t break the card if reviews endpoint is down
+      const quoteEl = el.querySelector(".quote");
+      quoteEl.textContent = "Reviews unavailable";
     }
   })();
 
@@ -63,6 +80,43 @@ export function ResultCard(c) {
   el.querySelector(".add-review").addEventListener("click", () => {
     // navigate to /pages/review or open modal 
     alert("Open review modal/form here.");
+  });
+
+  const starsWrap = el.querySelector(".stars-wrap");
+  const quoteEl   = el.querySelector(".quote");
+  const siteId    = c.id || c.place_id;
+
+  async function refreshReviews() {
+    if (!siteId) return;
+    const r = await getReviews(siteId).catch(() => null);
+    const avg   = Number(r?.avg ?? 0);
+    const count = Number(r?.count ?? 0);
+
+    starsWrap.innerHTML = "";
+    starsWrap.appendChild(RatingStars({ value: avg, count }));
+
+    const latest = Array.isArray(r?.latest) ? r.latest[0] : r?.latest;
+    if (latest?.comment) {
+      quoteEl.textContent = `“${latest.comment}”`;
+      quoteEl.classList.remove("muted");
+    } else {
+      quoteEl.textContent = "No reviews yet";
+      quoteEl.classList.add("muted");
+    }
+  }
+
+  refreshReviews();
+
+  el.querySelector(".add-review").addEventListener("click", () => {
+    const modal = ReviewModal({
+      campsite: c,
+      onSubmit: async ({ rating, comment }) => {
+        await postReview(siteId, { rating, comment });
+        await refreshReviews();
+      },
+      onClose: () => {},
+    });
+    document.body.appendChild(modal);
   });
 
   return el;
