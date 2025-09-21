@@ -27,14 +27,24 @@ window.addEventListener("DOMContentLoaded", () => {
 const routes = {
   search: () => SearchPage(),
   preferences: () => PreferencesPage(),
-  auth: () => AuthPage(),
+  auth: (params) => AuthPage(params),
 };
 
 const root = document.getElementById("app");
 
-function render(el) {
+function parseHash() {
+  const raw = (location.hash || "#/search").slice(2);
+  const [name, q = ""] = raw.split("?");
+  return { name: name || "search", params: new URLSearchParams(q) };
+}
+
+function render() {
+  const { name, params } = parseHash();
+  const view = (routes[name] || routes.search)(params);
+  //const root = document.getElementById("app");
+
   root.innerHTML = "";
-  root.appendChild(el);
+  root.appendChild(view);
 }
 
 export const app = {
@@ -56,3 +66,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const initial = (location.hash.replace("#/", "") || "search");
   app.navigate(initial);
 });
+
+window.addEventListener("hashchange", render);
+document.addEventListener("DOMContentLoaded", render);
