@@ -44,3 +44,7 @@ npm start
 ```
 
 Lastly, run frontend/index.html to start the frontend.
+
+### Supabase
+
+Supabase is used for hosting our database and user authentication. However, they have a policy where supabase projects will be paused after 7-days of inactivity, if the project is paused please get in touch.
